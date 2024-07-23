@@ -1,0 +1,28 @@
+# Project: PROYECTO-CORRECTOR
+# Makefile created by Embarcadero Dev-C++ 6.3
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+OBJ      = main-editor.o
+LINKOBJ  = main-editor.o
+LIBS     = -L"C:/msys64/mingw64/lib" -L"C:/msys64/mingw64/x86_64-w64-mingw32/lib" -static-libgcc -lgtk-4 -lpangowin32-1.0 -lharfbuzz -lpangocairo-1.0 -lpango-1.0 -lgdk_pixbuf-2.0 -lcairo-gobject -lcairo -lgraphene-1.0 -lgio-2.0 -lglib-2.0 -lintl -lgobject-2.0 -lhunspell-1.7
+INCS     = -I"C:/msys64/mingw64/include" -I"C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/13.2.0/include"
+CXXINCS  = -I"C:/msys64/mingw64/include" -I"C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/13.2.0/include"
+BIN      = PROYECTO-CORRECTOR.exe
+CXXFLAGS = $(CXXINCS) 
+CFLAGS   = $(INCS) -IC:/msys64/mingw64/include/gtk-4.0 -IC:/msys64/mingw64/include/pango-1.0 -IC:/msys64/mingw64/include/gdk-pixbuf-2.0 -IC:/msys64/mingw64/include/cairo -IC:/msys64/mingw64/include/graphene-1.0 -IC:/msys64/mingw64/lib/graphene-1.0/include -mfpmath=sse -msse -msse2 -IC:/msys64/mingw64/include/harfbuzz -IC:/msys64/mingw64/include/freetype2 -IC:/msys64/mingw64/include/glib-2.0 -IC:/msys64/mingw64/lib/glib-2.0/include -IC:/msys64/mingw64/include/webp -DLIBDEFLATE_DLL -IC:/msys64/mingw64/include/pixman-1 -IC:/msys64/mingw64/include/libpng16 -IC:/msys64/mingw64/include/fribidi -std=c11 -fexec-charset=UTF-8
+DEL      = C:\Program Files (x86)\Embarcadero\Dev-Cpp\devcpp.exe INTERNAL_DEL
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${DEL} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+main-editor.o: main-editor.c
+	$(CC) -c main-editor.c -o main-editor.o $(CFLAGS)

@@ -1,0 +1,157 @@
+/*
+PROYECTO N#1-LAB DE LENGUAJE DE PROGRAMACION
+REALIZADO POR URIEL CACERES V-29664183
+FECHA DE INICIO 21-11-2023
+
+VERSION 1.1
+
+CUADRO DE TEXTO QUE PERMITA HACER CORRECION ORTOGRAFICA Y DEMAS
+
+*/
+
+#include <gtk/gtk.h> // Incluye la biblioteca GTK
+
+// Funci n que se ejecuta cuando se hace clic en el bot n
+// Función que se ejecuta cuando se activa la aplicación
+static void activate(GtkApplication *app, gpointer user_data)
+{
+  // CREACION DE WIDGETS
+  GtkWidget *window;
+  GtkWidget *header;
+  GtkWidget *button;
+  GtkWidget *button2;
+  GtkWidget *button3;
+  GtkWidget *text_view;
+  GtkCssProvider *provider;
+  GtkWidget *scrolled_window;
+
+  
+  // Creamos una nueva ventana con desplazamiento
+  scrolled_window = gtk_scrolled_window_new();
+  gtk_window_set_default_size(GTK_WINDOW(scrolled_window), 1000, 800);
+
+  // Creamos una nueva ventana con desplazamiento
+
+  scrolled_window = gtk_scrolled_window_new();
+
+  // Creamos una nueva ventana de aplicación
+  window = gtk_application_window_new(app);
+  // Establecemos el título de la ventana
+  gtk_window_set_title(GTK_WINDOW(window), "EDITOR DE TEXTO");
+  // Establecemos el tamaño por defecto de la ventana
+  gtk_window_set_default_size(GTK_WINDOW(window), 1000, 800);
+
+  // Creamos un nuevo encabezado
+  header = gtk_header_bar_new();
+  gtk_header_bar_set_show_title_buttons(GTK_HEADER_BAR(header), TRUE);
+  gtk_window_set_titlebar(GTK_WINDOW(window), header);
+
+  // Creamos un nuevo botón con la etiqueta "AYUDA"
+  button = gtk_button_new_with_label("AYUDA");
+  gtk_widget_add_css_class(button, "my-button");
+  gtk_header_bar_pack_start(GTK_HEADER_BAR(header), button);
+
+  // Creamos un nuevo botón con la etiqueta "SALIR"
+  button2 = gtk_button_new_with_label("SALIR");
+
+  // Conectamos la señal "clicked" del botón al callback gtk_window_destroy
+  g_signal_connect_swapped(button2, "clicked", G_CALLBACK(gtk_window_destroy), window);
+
+  // Añadimos la clase 'button2' al cuadro de texto
+  gtk_widget_add_css_class(button2, "button2");
+  gtk_widget_add_css_class(button2, "my-button");
+  gtk_header_bar_pack_start(GTK_HEADER_BAR(header), button2);
+
+  // Creamos un nuevo botón con la etiqueta "GUARDAR EN UN .txt"
+  button3 = gtk_button_new_with_label("GUARDAR EN UN .txt");
+  // Añadimos la clase 'button3' al cuadro de texto
+  gtk_widget_add_css_class(button3, "button3");
+  gtk_widget_add_css_class(button3, "my-button");
+  gtk_header_bar_pack_start(GTK_HEADER_BAR(header), button3);
+
+  // Creamos un nuevo cuadro de texto
+  text_view = gtk_text_view_new();
+  // Añadimos la clase 'text_view' al cuadro de texto
+  gtk_widget_add_css_class(text_view, "text_view");
+  /// para que no sea en una linea infinita
+  gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(text_view), GTK_WRAP_WORD_CHAR);
+  // Establecemos el tamaño del cuadro de texto
+  gtk_widget_set_size_request(text_view, 720, 700);
+
+  // Creamos una caja para contener el cuadro de texto
+  GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+  // Centramos el contenido de la caja
+  gtk_widget_set_halign(box, GTK_ALIGN_CENTER);
+ // gtk_widget_set_valign(box, GTK_ALIGN_CENTER);
+
+  // Añadimos el cuadro de texto a la caja
+  gtk_box_append(GTK_BOX(box), text_view);
+
+  // Añadimos la caja a la ventana
+  //gtk_window_set_child(GTK_WINDOW(window), box);
+  //para meterlo en la ventana que se mueve
+ gtk_window_set_child(GTK_WINDOW(scrolled_window), box);
+  // Creamos un nuevo proveedor de CSS
+  provider = gtk_css_provider_new();
+
+  // Cargamos las reglas CSS desde una cadena
+  gtk_css_provider_load_from_data(provider,
+                                  "* {font-size: 16px; font-family:monospace}"
+                                  "window { background-color: #00A896; }"
+                                  "button {  color:blue}"
+                                  ".button2 {  color:#a4161a}"
+                                  ".button3 {  color:green}"
+                                  ".text_view{ background-color: #e2ece9 ;border: 5px solid #05668d; font-famili:serif; font-size:18px border-radius:10px}",
+                                  -1);
+
+  GtkStyleContext *style_context = gtk_widget_get_style_context(text_view);
+  gtk_style_context_add_provider(style_context, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+  // Agregamos el proveedor CSS al estilo del cuadro de texto
+  gtk_style_context_add_provider(gtk_widget_get_style_context(text_view),
+                                 GTK_STYLE_PROVIDER(provider),
+                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_provider(gtk_widget_get_style_context(box),
+                                 GTK_STYLE_PROVIDER(provider),
+                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_provider(gtk_widget_get_style_context(button),
+                                 GTK_STYLE_PROVIDER(provider),
+                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_provider(gtk_widget_get_style_context(button2),
+                                 GTK_STYLE_PROVIDER(provider),
+                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_provider(gtk_widget_get_style_context(button3),
+                                 GTK_STYLE_PROVIDER(provider),
+                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+  // Aplicamos las reglas CSS a la ventana
+  gtk_style_context_add_provider(gtk_widget_get_style_context(window),
+                                 GTK_STYLE_PROVIDER(provider),
+                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  // Añadimos el cuadro de texto a la ventana con desplazamiento
+ // gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrolled_window), text_view);
+ // Añadimos la caja a la ventana con desplazamiento
+gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrolled_window), box);
+
+// Añadimos la ventana con desplazamiento a la ventana
+gtk_window_set_child(GTK_WINDOW(window), scrolled_window);
+
+
+
+  // Mostramos la ventana
+  gtk_widget_show(window);
+}
+
+// Funci n principal
+int main(int argc, char **argv)
+{
+  GtkApplication *app; // Declara un puntero a una aplicaci n
+  int status;          // Declara una variable para el estado de salida de la aplicaci n
+
+  app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE); // Inicializa la aplicaci n
+  g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);          // Conecta la se al "activate" de la aplicaci n a la funci n activate
+  status = g_application_run(G_APPLICATION(app), argc, argv);             // Ejecuta la aplicaci n y guarda el estado de salida
+  g_object_unref(app);                                                    // Libera la memoria de la aplicaci n
+
+  return status; // Devuelve el estado de salida de la aplicaci n
+}
